@@ -266,7 +266,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   }
   
   // Calculate minimum simularity solution
-  Rcpp::Rcout<<"Optimize for Simularity"<<std::endl<<std::endl;
+  // Rcpp::Rcout<<"Optimize for Simularity"<<std::endl<<std::endl;
   
   // Initialize progeny
 #pragma omp parallel for schedule(static) 
@@ -287,7 +287,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   Best = Parents.col(0);
   
   // Run GA for simularity
-  Rcpp::Rcout<<"Gen  Simularity"<<std::endl;
+  // Rcpp::Rcout<<"Gen  Simularity"<<std::endl;
   currentRun = 0;
   for(arma::uword gen=0; gen<maxGen; gen++){
     // Mate parents
@@ -321,7 +321,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
     
     //Report status
     if(gen%10 == 0){
-      Rcpp::Rcout<<gen<<"  "<<simBest<<std::endl;
+      // Rcpp::Rcout<<gen<<"  "<<simBest<<std::endl;
     }
     
     //Terminate if solution isn't changing
@@ -333,7 +333,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   uMin = mean(u(Best));
   
   // Perform optimization for best solution
-  Rcpp::Rcout<<std::endl<<std::endl<<"Optimize for Crossing Plan"<<std::endl<<std::endl;
+  // Rcpp::Rcout<<std::endl<<std::endl<<"Optimize for Crossing Plan"<<std::endl<<std::endl;
   
   // Initialize progeny
 #pragma omp parallel for schedule(static) 
@@ -366,7 +366,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   Best = Parents.col(0);
   
   // Run GA
-  Rcpp::Rcout<<"Gen  Usefulness  Simularity  Angle  Length  Value"<<std::endl;
+  // Rcpp::Rcout<<"Gen  Usefulness  Simularity  Angle  Length  Value"<<std::endl;
   currentRun = 0;
   for(arma::uword gen=0; gen<maxGen; gen++){
     // Mate parents
@@ -413,7 +413,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
     
     //Report status
     if(gen%10 == 0){
-      Rcpp::Rcout<<gen<<"  "<<uBest<<"  "<<simBest<<"  "<<angleBest<<"  "<<lenBest<<"  "<<valBest<<std::endl;
+      // Rcpp::Rcout<<gen<<"  "<<uBest<<"  "<<simBest<<"  "<<angleBest<<"  "<<lenBest<<"  "<<valBest<<std::endl;
     }
     
     //Terminate if solution isn't changing
