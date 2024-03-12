@@ -3,7 +3,7 @@ Type: Package
 Title: Optimal contribution selection
 Version: 1.1
 Date: 2022-12-12
-Author: Chris Gaynor
+Author: Chris Gaynor, Giovanny Covarrubias-Pazaran, Ibnou Dieng, Khaled Al-Sham'aa, Angela Pacheco, Christian Cadena, Sergio Cruz
 Maintainer: Giovanny Covarrubias-Pazaran <cova_ruber@live.com.mx>
 Description: Optimal contribution selection from Chris Gaynor in the form of a package for shiny apps
 License: GPL (>= 2)
