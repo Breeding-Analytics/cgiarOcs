@@ -1,9 +1,11 @@
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::plugins(openmp)]]
+// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+
+
 #include <RcppArmadillo.h>
 #include <omp.h>
 // #include "/usr/local/opt/libomp/include/omp.h"
-
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::depends(openmp)]]
 // Find row given mapping index
 // k = mapping index
 // n = dimension of matrix
