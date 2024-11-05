@@ -1,7 +1,7 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(openmp)]]
 #include <RcppArmadillo.h>
-// #include <omp.h>
+#include <omp.h>
 
 // Find row given mapping index
 // k = mapping index
