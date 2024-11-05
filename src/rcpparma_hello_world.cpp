@@ -1,11 +1,8 @@
-// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
-
-
-#include <RcppArmadillo.h>
-#include <omp.h>
-// #include "/usr/local/opt/libomp/include/omp.h"
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::depends(openmp)]]
+//// [[Rcpp::plugins(openmp)]]
+#include <RcppArmadillo.h>
+//#include <omp.h>
+
 // Find row given mapping index
 // k = mapping index
 // n = dimension of matrix
@@ -223,7 +220,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
                          arma::uword maxRun=100, //Stopping criteria for maximum number of runs without change
                          double anglePenalty=0.5, //Penalty to vector length for off angle, higher value emphasises angle more
                          int nThreads=4){ //Number of threads for OpenMP
-  omp_set_num_threads(nThreads); //Sets number of threads for OpenMP
+  //omp_set_num_threads(nThreads); //Sets number of threads for OpenMP
   arma::umat crossPlan(2,nPop); //Crossing plan for GA generations
   arma::umat outCrossPlan(nCross,3); //Final crossing plan
   arma::uword nInd = G.n_cols; //Number of parents under consideration
@@ -272,7 +269,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   // Rcpp::Rcout<<"Optimize for Simularity"<<std::endl<<std::endl;
 
   // Initialize progeny
-#pragma omp parallel for schedule(static)
+//#pragma omp parallel for schedule(static)
   for(arma::uword i=0; i<nPop; i++){
     Progeny.col(i) = sampleInt(nCross, potCross);
     arma::vec x = calcContr(Progeny.unsafe_col(i), nInd,
@@ -295,7 +292,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   for(arma::uword gen=0; gen<maxGen; gen++){
     // Mate parents
     crossPlan = sampHalfDialComb(nSel, nPop);
-#pragma omp parallel for schedule(static)
+//#pragma omp parallel for schedule(static)
     for(arma::uword i=0; i<nPop; i++){
       Progeny.col(i) =
         mate(Parents.unsafe_col(crossPlan(0,i)),
@@ -339,7 +336,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   // Rcpp::Rcout<<std::endl<<std::endl<<"Optimize for Crossing Plan"<<std::endl<<std::endl;
 
   // Initialize progeny
-#pragma omp parallel for schedule(static)
+//#pragma omp parallel for schedule(static)
   for(arma::uword i=0; i<nPop; i++){
     Progeny.col(i) = sampleInt(nCross, potCross);
     arma::vec x = calcContr(Progeny.unsafe_col(i), nInd,
@@ -374,7 +371,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   for(arma::uword gen=0; gen<maxGen; gen++){
     // Mate parents
     crossPlan = sampHalfDialComb(nSel, nPop);
-#pragma omp parallel for schedule(static)
+//#pragma omp parallel for schedule(static)
     for(arma::uword i=0; i<nPop; i++){
       Progeny.col(i) =
         mate(Parents.unsafe_col(crossPlan(0,i)),
