@@ -1,12 +1,12 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(openmp)]]
 #include <RcppArmadillo.h>
-#include <omp.h>
+// #include <omp.h>
 
 // Find row given mapping index
 // k = mapping index
 // n = dimension of matrix
-arma::uword mapRow(const arma::uword& k, 
+arma::uword mapRow(const arma::uword& k,
                    const arma::uword& n){
   return n-2-static_cast<arma::uword>(sqrt(-8*double(k) + 4*double(n)*(double(n)-1)-7)/2-0.5);
 }
@@ -15,8 +15,8 @@ arma::uword mapRow(const arma::uword& k,
 // row = row from mapRow
 // k = mapping index
 // n = dimension of matrix
-arma::uword mapCol(const arma::uword& row, 
-                   const arma::uword& k, 
+arma::uword mapCol(const arma::uword& row,
+                   const arma::uword& k,
                    const arma::uword& n){
   return k+row+1 - n*(n-1)/2 + (n-row)*((n-row)-1)/2;
 }
@@ -108,7 +108,7 @@ arma::uvec sampleInt(arma::uword n, arma::uword N){
 // only the number of combinations beyond the complete number is sampled
 // nLevel = number of parents
 // n = number of combinations to sample
-arma::umat sampHalfDialComb(arma::uword nLevel, 
+arma::umat sampHalfDialComb(arma::uword nLevel,
                             arma::uword n){
   arma::uword N = nLevel*(nLevel-1)/2;
   arma::uword fullComb = 0;
@@ -141,9 +141,9 @@ arma::umat sampHalfDialComb(arma::uword nLevel,
 // Finds parental contributions for a crossing plan
 // crosses = the crossing plan
 // nInd = number of potential parents
-arma::vec calcContr(arma::uvec crosses, 
+arma::vec calcContr(arma::uvec crosses,
                     const arma::uword& nInd,
-                    arma::uvec& rowPos, 
+                    arma::uvec& rowPos,
                     arma::uvec& colPos){
   double val = 1/(2*double(crosses.n_elem));
   arma::vec x(nInd, arma::fill::zeros);
@@ -163,13 +163,13 @@ arma::vec calcContr(arma::uvec crosses,
 // simMax = simularity of maximum usefulness solution
 // uMin = usefulness of minimum simularity solution
 // simMin = simularity of minimum simularity solution
-void calcVec(double& angle, 
+void calcVec(double& angle,
              double& length,
-             double u, 
+             double u,
              double sim,
-             const double& uMax, 
+             const double& uMax,
              const double& simMax,
-             const double& uMin, 
+             const double& uMin,
              const double& simMin){
   u = (u-uMin)/(uMax-uMin);
   sim = (simMax-sim)/(simMax-simMin);
@@ -198,20 +198,20 @@ arma::uvec mate(arma::uvec a, arma::uvec b){
 // crosses = crossing plan to mutate (input/output variable)
 // nMutate = length of random crossing plan
 // potCross = number of potential crosses
-void mutate(arma::uvec crosses, const arma::uword& nMutate, 
+void mutate(arma::uvec crosses, const arma::uword& nMutate,
             const arma::uword& potCross){
   arma::uvec mutations = sampleInt(nMutate,potCross);
   crosses = mate(crosses,mutations);
 }
 
-// Quick and dirty implementation of a genetic algorithm (GA) 
+// Quick and dirty implementation of a genetic algorithm (GA)
 // Uses usefulness criteria for crossing plan optimization
 // Crosses are selected from a half diallele without selfs
 // [[Rcpp::export]]
 Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
                          double targetAngle, //Number of degrees to target from maximum usefulness (in radians)
                          arma::vec& u, //Vector of usefulness criterion for crosses
-                         arma::mat& G, //Relationship matrix for individuals 
+                         arma::mat& G, //Relationship matrix for individuals
                          double probMut=0.01, //Mutation probability for progeny in GA
                          arma::uword nMutate=2, //Number of potential mutations in mutated progeny
                          arma::uword nSel=500, //Number of parents in GA
@@ -245,15 +245,15 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
       ++tmpI;
     }
   }
-  
+
   // Calculate maximum usefulness (doesn't require GA)
   arma::uvec uBestIndex = sort_index(u,"descend");
   uBestIndex.resize(nCross);
-  arma::vec x = calcContr(uBestIndex.unsafe_col(0), nInd, 
+  arma::vec x = calcContr(uBestIndex.unsafe_col(0), nInd,
                           rowPos, colPos);
   uMax = mean(u(uBestIndex));
   simMax = as_scalar(x.t()*G*x);
-  
+
   if(targetAngle<1e-6){
     // No need to optimize crossing plan, just return best
     for(arma::uword i=0; i<nCross; ++i){
@@ -264,19 +264,19 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
                               Rcpp::Named("uMax")=uMax,
                               Rcpp::Named("simMax")=simMax);
   }
-  
+
   // Calculate minimum simularity solution
   // Rcpp::Rcout<<"Optimize for Simularity"<<std::endl<<std::endl;
-  
+
   // Initialize progeny
-#pragma omp parallel for schedule(static) 
+#pragma omp parallel for schedule(static)
   for(arma::uword i=0; i<nPop; i++){
     Progeny.col(i) = sampleInt(nCross, potCross);
-    arma::vec x = calcContr(Progeny.unsafe_col(i), nInd, 
+    arma::vec x = calcContr(Progeny.unsafe_col(i), nInd,
                             rowPos, colPos);
     simProgeny(i) = as_scalar(x.t()*G*x);
   }
-  
+
   // Select parents and best solution
   rankProgeny = sort_index(simProgeny,"ascend");
   for(arma::uword i=0; i<nSel; i++){
@@ -285,7 +285,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   }
   simBest = simParents(0);
   Best = Parents.col(0);
-  
+
   // Run GA for simularity
   // Rcpp::Rcout<<"Gen  Simularity"<<std::endl;
   currentRun = 0;
@@ -294,14 +294,14 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
     crossPlan = sampHalfDialComb(nSel, nPop);
 #pragma omp parallel for schedule(static)
     for(arma::uword i=0; i<nPop; i++){
-      Progeny.col(i) = 
+      Progeny.col(i) =
         mate(Parents.unsafe_col(crossPlan(0,i)),
              Parents.unsafe_col(crossPlan(1,i)));
       arma::vec p(1,arma::fill::randu);
       if(as_scalar(p)<probMut){
         mutate(Progeny.unsafe_col(i),nMutate,potCross);
       }
-      arma::vec x = calcContr(Progeny.unsafe_col(i), nInd, 
+      arma::vec x = calcContr(Progeny.unsafe_col(i), nInd,
                               rowPos, colPos);
       simProgeny(i) = as_scalar(x.t()*G*x);
     }
@@ -318,12 +318,12 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
     }else{
       ++currentRun;
     }
-    
+
     //Report status
     if(gen%10 == 0){
       // Rcpp::Rcout<<gen<<"  "<<simBest<<std::endl;
     }
-    
+
     //Terminate if solution isn't changing
     if(currentRun>=maxRun){
       break;
@@ -331,15 +331,15 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   }
   simMin = simBest;
   uMin = mean(u(Best));
-  
+
   // Perform optimization for best solution
   // Rcpp::Rcout<<std::endl<<std::endl<<"Optimize for Crossing Plan"<<std::endl<<std::endl;
-  
+
   // Initialize progeny
-#pragma omp parallel for schedule(static) 
+#pragma omp parallel for schedule(static)
   for(arma::uword i=0; i<nPop; i++){
     Progeny.col(i) = sampleInt(nCross, potCross);
-    arma::vec x = calcContr(Progeny.unsafe_col(i), nInd, 
+    arma::vec x = calcContr(Progeny.unsafe_col(i), nInd,
                             rowPos, colPos);
     simProgeny(i) = as_scalar(x.t()*G*x);
     uProgeny(i) = mean(u(Progeny.col(i)));
@@ -347,7 +347,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
             simProgeny(i), uMax, simMax, uMin, simMin);
     valProgeny(i) = lenProgeny(i)-anglePenalty*fabs(angleProgeny(i)-targetAngle);
   }
-  
+
   // Select parents and best solution
   rankProgeny = sort_index(valProgeny,"descend");
   for(arma::uword i=0; i<nSel; i++){
@@ -364,7 +364,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
   uBest = uParents(0);
   simBest = simParents(0);
   Best = Parents.col(0);
-  
+
   // Run GA
   // Rcpp::Rcout<<"Gen  Usefulness  Simularity  Angle  Length  Value"<<std::endl;
   currentRun = 0;
@@ -373,14 +373,14 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
     crossPlan = sampHalfDialComb(nSel, nPop);
 #pragma omp parallel for schedule(static)
     for(arma::uword i=0; i<nPop; i++){
-      Progeny.col(i) = 
+      Progeny.col(i) =
         mate(Parents.unsafe_col(crossPlan(0,i)),
              Parents.unsafe_col(crossPlan(1,i)));
       arma::vec p(1,arma::fill::randu);
       if(as_scalar(p)<probMut){
         mutate(Progeny.unsafe_col(i),nMutate,potCross);
       }
-      arma::vec x = calcContr(Progeny.unsafe_col(i), nInd, 
+      arma::vec x = calcContr(Progeny.unsafe_col(i), nInd,
                               rowPos, colPos);
       simProgeny(i) = as_scalar(x.t()*G*x);
       uProgeny(i) = mean(u(Progeny.col(i)));
@@ -388,7 +388,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
               simProgeny(i), uMax, simMax, uMin, simMin);
       valProgeny(i) = lenProgeny(i)-anglePenalty*fabs(angleProgeny(i)-targetAngle);
     }
-    
+
     // Select parents and best solution
     rankProgeny = sort_index(valProgeny,"descend");
     for(arma::uword i=0; i<nSel; i++){
@@ -410,18 +410,18 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
     }else{
       ++currentRun;
     }
-    
+
     //Report status
     if(gen%10 == 0){
       // Rcpp::Rcout<<gen<<"  "<<uBest<<"  "<<simBest<<"  "<<angleBest<<"  "<<lenBest<<"  "<<valBest<<std::endl;
     }
-    
+
     //Terminate if solution isn't changing
     if(currentRun>=maxRun){
       break;
     }
   }
-  
+
   //Convert solution to an ordered crossing plan
   Best = sort(Best);
   for(arma::uword i=0; i<nCross; ++i){
@@ -429,7 +429,7 @@ Rcpp::List selectCrosses(arma::uword nCross, //Number of crosses to make
     outCrossPlan(i,1) = colPos(Best(i));
     outCrossPlan(i,2) = Best(i);
   }
-  
+
   return Rcpp::List::create(Rcpp::Named("crossPlan")=outCrossPlan+1, //C++ to R
                             Rcpp::Named("uMax")=uMax,
                             Rcpp::Named("uMin")=uMin,
