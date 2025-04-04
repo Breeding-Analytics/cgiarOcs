@@ -609,13 +609,13 @@ Rcpp::List selectCrossPlan(arma::uword cycleNumber,
 
 
   //file<<"maxPerformance  maxSimilarity"<<std::endl;
-  Rcpp::Rcout<<"maxPerformance  maxSimilarity"<<std::endl;
+  //Rcpp::Rcout<<"maxPerformance  maxSimilarity"<<std::endl;
   //file<<uMax<<"  "<<simMax<<std::endl<<std::endl;
-  Rcpp::Rcout<<uMax<<"  "<<simMax<<std::endl<<std::endl;
+  //Rcpp::Rcout<<uMax<<"  "<<simMax<<std::endl<<std::endl;
 
 
   if(targetAngle<1e-6){
-    Rcpp::Rcout<<"target angle  "<<targetAngle<<std::endl<<std::endl;
+    //Rcpp::Rcout<<"target angle  "<<targetAngle<<std::endl<<std::endl;
     // No need to optimize crossing plan, just return best
     for(arma::uword i=0; i<nCross; ++i){
       outCrossPlan(i,0) = rowPos(uBestIndex(i));
@@ -633,7 +633,7 @@ Rcpp::List selectCrossPlan(arma::uword cycleNumber,
   // Calculate minimum similarity solution
 
   //file<<"Minimum Similarity"<<std::endl;
-  Rcpp::Rcout<<"Minimum Similarity"<<std::endl;
+  //Rcpp::Rcout<<"Minimum Similarity"<<std::endl;
 
 
   // Initialize progeny: nCross (number of desired crosses) random crossing combinations are generated 10,000 times as an initial starting population of solutions
@@ -658,15 +658,15 @@ Rcpp::List selectCrossPlan(arma::uword cycleNumber,
   Best = Parents.col(0);
 
   //file<<simBest<<std::endl<<std::endl;
-  Rcpp::Rcout<<simBest<<std::endl<<std::endl;
+  //Rcpp::Rcout<<simBest<<std::endl<<std::endl;
 
 
   //file<<"Optimize for Similarity"<<std::endl<<std::endl;
-  Rcpp::Rcout<<"Optimize for Similarity"<<std::endl<<std::endl;
+  //Rcpp::Rcout<<"Optimize for Similarity"<<std::endl<<std::endl;
 
   // Run GA for simularity
   //file<<"Gen  Similarity"<<std::endl;
-  Rcpp::Rcout<<"Gen  Similarity"<<std::endl;
+  //Rcpp::Rcout<<"Gen  Similarity"<<std::endl;
   currentRun = 0;
   for(arma::uword gen=0; gen<maxGen; gen++){
     // Mate parents
@@ -701,7 +701,7 @@ Rcpp::List selectCrossPlan(arma::uword cycleNumber,
     //Report status
     if(gen%10 == 0){
       //file<<gen<<"  "<<simBest<<std::endl;
-      Rcpp::Rcout<<gen<<"  "<<simBest<<std::endl;
+      //Rcpp::Rcout<<gen<<"  "<<simBest<<std::endl;
     }
 
     //Terminate if solution isn't changing
@@ -714,7 +714,7 @@ Rcpp::List selectCrossPlan(arma::uword cycleNumber,
 
   // Perform optimization for best solution
   //file<<std::endl<<std::endl<<"Optimize for Crossing Plan"<<std::endl<<std::endl;
-  Rcpp::Rcout<<std::endl<<std::endl<<"Optimize for Crossing Plan"<<std::endl<<std::endl;
+  //Rcpp::Rcout<<std::endl<<std::endl<<"Optimize for Crossing Plan"<<std::endl<<std::endl;
 
   // Initialize progeny
 #pragma omp parallel for schedule(static)
@@ -748,7 +748,7 @@ Rcpp::List selectCrossPlan(arma::uword cycleNumber,
 
   // Run GA
   //file<<"Gen  Usefulness  Simularity  Angle  Length  Value"<<std::endl;
-  Rcpp::Rcout<<"Gen  Usefulness  Simularity  Angle  Length  Value"<<std::endl;
+  //Rcpp::Rcout<<"Gen  Usefulness  Simularity  Angle  Length  Value"<<std::endl;
   currentRun = 0;
   for(arma::uword gen=0; gen<maxGen; gen++){
     // Mate parents
@@ -796,7 +796,7 @@ Rcpp::List selectCrossPlan(arma::uword cycleNumber,
     //Report status
     if(gen%10 == 0){
       //file<<gen<<"  "<<uBest<<"  "<<simBest<<"  "<<angleBest<<"  "<<lenBest<<"  "<<valBest<<std::endl;
-      Rcpp::Rcout<<gen<<"  "<<uBest<<"  "<<simBest<<"  "<<angleBest<<"  "<<lenBest<<"  "<<valBest<<std::endl;
+      //Rcpp::Rcout<<gen<<"  "<<uBest<<"  "<<simBest<<"  "<<angleBest<<"  "<<lenBest<<"  "<<valBest<<std::endl;
     }
 
     //Terminate if solution isn't changing
