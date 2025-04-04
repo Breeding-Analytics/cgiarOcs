@@ -33,9 +33,35 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// selectCrossPlan
+Rcpp::List selectCrossPlan(arma::uword cycleNumber, arma::uword nCross, arma::mat& M, arma::vec a, arma::vec d, arma::uword ploidy, double targetAngle, double probMut, arma::uword nMutate, arma::uword nSel, arma::uword nPop, arma::uword maxGen, arma::uword maxRun, double anglePenalty, int cores);
+RcppExport SEXP _cgiarOcs_selectCrossPlan(SEXP cycleNumberSEXP, SEXP nCrossSEXP, SEXP MSEXP, SEXP aSEXP, SEXP dSEXP, SEXP ploidySEXP, SEXP targetAngleSEXP, SEXP probMutSEXP, SEXP nMutateSEXP, SEXP nSelSEXP, SEXP nPopSEXP, SEXP maxGenSEXP, SEXP maxRunSEXP, SEXP anglePenaltySEXP, SEXP coresSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::uword >::type cycleNumber(cycleNumberSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type nCross(nCrossSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type M(MSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type a(aSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type d(dSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< double >::type targetAngle(targetAngleSEXP);
+    Rcpp::traits::input_parameter< double >::type probMut(probMutSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type nMutate(nMutateSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type nSel(nSelSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type nPop(nPopSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type maxGen(maxGenSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type maxRun(maxRunSEXP);
+    Rcpp::traits::input_parameter< double >::type anglePenalty(anglePenaltySEXP);
+    Rcpp::traits::input_parameter< int >::type cores(coresSEXP);
+    rcpp_result_gen = Rcpp::wrap(selectCrossPlan(cycleNumber, nCross, M, a, d, ploidy, targetAngle, probMut, nMutate, nSel, nPop, maxGen, maxRun, anglePenalty, cores));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_cgiarOcs_selectCrosses", (DL_FUNC) &_cgiarOcs_selectCrosses, 12},
+    {"_cgiarOcs_selectCrossPlan", (DL_FUNC) &_cgiarOcs_selectCrossPlan, 15},
     {NULL, NULL, 0}
 };
 

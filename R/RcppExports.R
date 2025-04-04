@@ -5,3 +5,7 @@ selectCrosses <- function(nCross, targetAngle, u, G, probMut = 0.01, nMutate = 2
     .Call(`_cgiarOcs_selectCrosses`, nCross, targetAngle, u, G, probMut, nMutate, nSel, nPop, maxGen, maxRun, anglePenalty, nThreads)
 }
 
+selectCrossPlan <- function(cycleNumber, nCross, M, a, d, ploidy, targetAngle, probMut = 0.01, nMutate = 2L, nSel = 500L, nPop = 10000L, maxGen = 1000L, maxRun = 100L, anglePenalty = 0.5, cores = 4L) {
+    .Call(`_cgiarOcs_selectCrossPlan`, cycleNumber, nCross, M, a, d, ploidy, targetAngle, probMut, nMutate, nSel, nPop, maxGen, maxRun, anglePenalty, cores)
+}
+
