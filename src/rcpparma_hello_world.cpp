@@ -467,7 +467,7 @@ Rcpp::List selectCrossPlan(arma::uword cycleNumber,
   omp_set_num_threads(cores); //Sets number of cores for OpenMP
   arma::uword nSnp = M.n_cols; //Number of Snps
   arma::umat crossPlan(2,nPop); //Crossing plan for GA generations
-  arma::umat outCrossPlan(nCross,2); //Final crossing plan
+  arma::umat outCrossPlan(nCross,3); //Final crossing plan
   arma::uword nInd = M.n_rows; //Number of parents under consideration
   arma::uword potCross = nInd*(nInd-1)/2; //Number of potential crosses
   arma::umat Progeny(nCross,nPop), Parents(nCross,nSel); //Solutions
