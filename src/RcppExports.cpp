@@ -34,14 +34,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // selectCrossPlan
-Rcpp::List selectCrossPlan(arma::uword cycleNumber, arma::uword nCross, arma::mat& M, arma::vec a, arma::vec d, arma::uword ploidy, double targetAngle, double probMut, arma::uword nMutate, arma::uword nSel, arma::uword nPop, arma::uword maxGen, arma::uword maxRun, double anglePenalty, int cores);
+Rcpp::List selectCrossPlan(arma::uword cycleNumber, arma::uword nCross, const arma::mat& M, arma::vec a, arma::vec d, arma::uword ploidy, double targetAngle, double probMut, arma::uword nMutate, arma::uword nSel, arma::uword nPop, arma::uword maxGen, arma::uword maxRun, double anglePenalty, int cores);
 RcppExport SEXP _cgiarOcs_selectCrossPlan(SEXP cycleNumberSEXP, SEXP nCrossSEXP, SEXP MSEXP, SEXP aSEXP, SEXP dSEXP, SEXP ploidySEXP, SEXP targetAngleSEXP, SEXP probMutSEXP, SEXP nMutateSEXP, SEXP nSelSEXP, SEXP nPopSEXP, SEXP maxGenSEXP, SEXP maxRunSEXP, SEXP anglePenaltySEXP, SEXP coresSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::uword >::type cycleNumber(cycleNumberSEXP);
     Rcpp::traits::input_parameter< arma::uword >::type nCross(nCrossSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type M(MSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type M(MSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type a(aSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type d(dSEXP);
     Rcpp::traits::input_parameter< arma::uword >::type ploidy(ploidySEXP);
